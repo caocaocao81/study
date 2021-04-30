@@ -1,0 +1,122 @@
+{% extends "index.html" %}
+
+
+{% block link %}
+<link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+        <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content mailbox-content">
+                        <div class="file-manager">
+                            <a class="btn btn-block btn-primary compose-mail" href="mail_compose.html">Compose Mail</a>
+                            <div class="space-25"></div>
+                            <h5>Folders</h5>
+                            <ul class="folder-list m-b-md" style="padding: 0">
+                                <li><a href="{{url_for('mail.mailbox')}}"> <i class="fa fa-inbox "></i> Inbox <span class="label label-warning pull-right">1</span> </a></li>
+                                <li></li>
+                                <li><a href="{{url_for('mail.mailbox')}}"> <i class="fa fa-certificate"></i> Important</a></li>
+                                <li></li>
+                                <li><a href="{{url_for('mail.mailbox')}}"> <i class="fa fa-trash-o"></i> Trash</a></li>
+                            </ul>
+                            <h5>Categories</h5>
+                            <ul class="category-list" style="padding: 0">
+                                <li><a href="#"> <i class="fa fa-circle text-navy"></i> Work </a></li>
+                                <li><a href="#"> <i class="fa fa-circle text-danger"></i> Documents</a></li>
+                                <li><a href="#"> <i class="fa fa-circle text-primary"></i> Social</a></li>
+                                <li><a href="#"> <i class="fa fa-circle text-info"></i> Advertising</a></li>
+                                <li><a href="#"> <i class="fa fa-circle text-warning"></i> Clients</a></li>
+                            </ul>
+
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 animated fadeInRight">
+            <div class="mail-box-header">
+
+                <form method="get" action="index.html" class="pull-right mail-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" name="search" placeholder="Search email">
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <h2>
+                    Inbox ({{mailcount}})
+                </h2>
+                <div class="mail-tools tooltip-demo m-t-md">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i></button>
+                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i></button>
+
+                    </div>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="left" title="Refresh inbox"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Mark as read"><i class="fa fa-eye"></i> </button>
+                    <a class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" title="Move to trash"><i class="fa fa-trash-o"></i> </a>
+
+                </div>
+            </div>
+                <div class="mail-box">
+
+                <table class="table table-hover table-mail">
+                <tbody>
+<!--                邮件箱 之后用ajax实现自动获取数据库邮件 用户名 用户邮箱地址（看来用户邮箱地址还得设置唯一）邮件标题 邮件内容 发送时间-->
+                {% for i in result%}
+                <tr class="unread">
+                    <td class="check-mail">
+                        <input type="checkbox" class="i-checks">
+                    </td>
+                    <td class="mail-ontact"><a href="{{url_for('mail.mail_detail',mid=i.id)}}">{{i.sendname}}</a></td>
+                    <td class="mail-subject"><a href="{{url_for('mail.mail_detail',mid=i.id )}}">{{i.title}}</a></td>
+                    {% if i.flag %}
+                        <td class=""><i class="fa fa-paperclip"></i></td>
+                    {% else %}
+                        <td class=""></td>
+                    {% endif %}
+                    <td class="text-right mail-date">{{i.time}}</td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+                </table>
+
+
+                </div>
+            </div>
+        </div>
+        </div>
+{% endblock %}
+{% block footer %}
+        <div class="footer">
+            <div class="pull-right">
+                10GB of <strong>250GB</strong> Free.
+            </div>
+            <div>
+                <strong>Copyright</strong> Example Company &copy; 2020-2021
+            </div>
+        </div>
+{% endblock %}
+
+
+{% block script %}
+
+    <!-- iCheck -->
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+{% endblock %}

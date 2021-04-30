@@ -1,0 +1,126 @@
+{% extends "index.html" %}
+
+{% block main %}
+       <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>Responsible Video</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="{{url_for('index.index')}}">Home</a>
+                    </li>
+                    <li class="active">
+                        <strong>Responsible Video</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Video window</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">Config option 1</a>
+                                    </li>
+                                    <li><a href="#">Config option 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                                {% for m in movie%}
+                                <video src="{{url_for('static',filename=m.movie)}}" class=""  controls="controls" >
+                                    your browser does not support the video tag {{m}}
+                                </video>
+                                {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>课程描述</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content profile-content">
+                            <h4><strong>课程章程</strong></h4>
+                            <p>
+                                {{user_node}}
+                            </p>
+                        </div>
+                    </div>
+
+<!--                    小笔记-->
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>笔记本</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content profile-content">
+                            <h4><strong>课程学习笔记</strong></h4>
+<!--                            可以记录更新时间，数据库中之后安排上-->
+                            <p><i class="fa fa-clock-o"></i> Uploaded on October 27, 2011</p>
+                            <textarea class="form-control" rows="5" name=textarea  style="OVERFLOW:   visible" id="{{url_username}}">{{result}}</textarea>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block footer %}
+     <div id="footer">
+            <h4 style="text-align:center;color:white">@2021@课程</h4>
+     </div>
+{% endblock %}
+
+{% block script %}
+<!--    如果点击按钮则保存，之后实现点到区域外就保存-->
+    <script>
+        var text = document.getElementById('{{url_username}}').value;
+        $.ajax({
+            type: 'POST',
+            url: {{url_for('course.getnode')}},
+            data: JSON.stringify(text), //# 转化为字符串
+            contentType: 'application/json; charset=UTF-8',
+            dataType: 'json', //# 注意：这里是指希望服务端返回json格式的数据
+            success: function(data) { //# 这里的data就是json格式的数据
+            },
+            error: function(xhr, type) {
+            }
+        });
+    </script>
+{% endblock %}

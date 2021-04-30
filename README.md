@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 # study
+=======
+# study
+>>>>>>> master

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INSPINIA | Login</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .font_right
+      {
+      	color:Green;
+        font:20px "华文琥珀";
+        text-align:center;
+      }
+      .font_error
+      {
+      	color:Red;
+        font:20px "华文琥珀";
+        text-align:center;
+      }
+      .form1{
+        height: 30px;
+        padding: 5px 10px;
+        line-height: 1.5;
+        border-radius: 3px;
+        font: 14px "楷书";
+      }
+    </style>
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name" style="margin:0 auto">IN+</h1>
+
+            </div>
+            <h3 style="margin:0 auto">Welcome to IN+</h3>
+
+            <form class="m-t" role="form" action="/login" method="post" >
+                <div class="form-group">
+                    <input type="text" class="form-control" name="email" placeholder="Username" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" placeholder="Password" required="">
+                </div>
+                <div class="form-group row">
+                    <img  id="captcha-img" class="col-md-5" src="{{ url_for('index.get_img') }}"><!--加了id aptcha-img-->
+                    <input type="text" class="col-md-6 form1"  name="code" placeholder="Verification code" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b" >Login</button>
+
+                <a href="#"><small>Forgot password?</small></a>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="{{url_for('register')}}">Create an account</a>
+            </form>
+
+
+            <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            if('{{ get_flashed_messages()[0]}}'){
+                if(confirm('{{message}}') == true){
+
+                 }
+                 else {
+                    return {{message}};
+                 }
+             }
+         });
+    </script>
+</body>
+
+</html>

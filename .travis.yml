@@ -1,10 +1,15 @@
 #指定运行环境
 language: python3
 #指定nodejs版本，可以指定多个
+services:
+  - mysql
+
 python3:
   - 3.7
-sudo:required
+sudo: enable
 
-before_install: sudo pip install flask pillow redis & cd myproduct/venv
+before_install: cd test/venv
+install:
+  - pip install -r requirements.txt
 
-script:main.py
+script: python3 test.py

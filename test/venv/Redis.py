@@ -2,8 +2,8 @@ import redis
 import asyncio
 from myproduct.venv.Model.suggestion import *
 
-__redis_pool = redis.ConnectionPool(host='121.43.147.188', port=337,
-                                    password='cao123.', db=1, decode_responses=True)  # decode_responses转换编码
+__redis_pool = redis.ConnectionPool(host='0.0.0.0', port=337,
+                                    password='', db=1, decode_responses=True)  # decode_responses转换编码
 
 redis_conn = redis.Redis(connection_pool=__redis_pool)
 

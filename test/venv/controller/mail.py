@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, json, url_for
+from flask import Blueprint, render_template, session, json, url_for, request,redirect
 from myproduct.venv.Model.mail import *
 
 mail_ = Blueprint('mail',__name__)  # 定义蓝图
@@ -17,6 +17,13 @@ def mail_detail(mid):  # 邮件信息
     next,pre = mail.select_next_mail(session['username'],mid)
     result = mail.selecy_mail_by_user_mid(session['username'],mid)
     return render_template('mail_detail.html',result=result,next_mail=next,pre_mail=pre)
+
+
+@mail_.route('/write_mail',methods=['GET','POST'])  # 写邮件
+def write_mail():
+    if request.method == 'POST':
+        return redirect(url_for('mail.mailbox'))
+    return render_template('mail_compose.html')
 
 
 @mail_.route('/mail_del/<mid>')

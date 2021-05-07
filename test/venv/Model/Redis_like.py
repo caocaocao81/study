@@ -8,6 +8,11 @@ class Rlike():
         __count = 'sug_user_like_set_'+str(sug_id)
         return redis_conn.scard(__count)
 
+    def change_count(self,sug_all):  # 更新点赞数
+        for i in sug_all:
+            i['s_like'] = self.get_count(i['id'])
+        return sug_all
+
     def dis_like_user(self,sug_id,uname):
         __sug_count = str(sug_id)
         __sug_user_like = 'sug_user_like_set_' + str(sug_id)

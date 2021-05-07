@@ -1,3 +1,4 @@
+from flask import session
 from sqlalchemy import Table, MetaData, func
 from myproduct.venv.main import db
 import hashlib
@@ -68,19 +69,25 @@ class User(db.Model):
         return a
 
     # 用户登录和注册返回的提示信息
-    def validate(self,username, pwd1):
+    def validate(self,username, pwd1,vcode):
         user = db.session.query(User).filter(User.name == username).first()
         md5 = hashlib.md5()
-        if user:
-            # 加密密码
-            md5.update(pwd1.encode('utf-8'))
-            pwd_md5 = md5.hexdigest()
-            if user.pwd == pwd_md5:
-                return '登陆成功'
+        try:
+            if vcode == session['vcode']:
+                if user:
+                    # 加密密码
+                    md5.update(pwd1.encode('utf-8'))
+                    pwd_md5 = md5.hexdigest()
+                    if user.pwd == pwd_md5:
+                        return '登陆成功'
+                    else:
+                        return '密码错误'
+                else:
+                    return '用户名不存在'
             else:
-                return '密码错误'
-        else:
-            return '用户名不存在'
+                return '验证码错误'
+        except:
+            return '未知错误'
 
     def change_data(self,row):
         list = []

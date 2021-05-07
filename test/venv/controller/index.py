@@ -14,10 +14,11 @@ def first():
     return render_template('login.html')
 
 
-@index_.route('/get_img')
+@index_.route('/get_img')  # 获得验证码图片
 def get_img():
     text, image = Captcha.gene_graph_captcha()
     print(text, image)
+    session['vcode'] = text
     out = BytesIO()
     image.save(out, 'png')
     out.seek(0)
@@ -26,12 +27,13 @@ def get_img():
     return resp
 
 
-@index_.route('/index', methods=['GET'])
+@index_.route('/index', methods=['GET'])  # 首页
 def index():
     # img = {'1':'a1.jpg', '2':'a2.jpg', '3':'a3.jpg', '4':'a4.jpg', '5':'a5.jpg'}
     img = {'1':'1.jpg', '2':'1.jpg', '3':'1.jpg', '4':'1.jpg', '5':'1.jpg'}
     if session['username']:
-        return render_template('jiemian.html',url_username=session['username'],img=img,course=da.courseDAL.course_select_all())
+        return render_template('jiemian.html',url_username=session['username'],img=img,course=da.courseDAL.
+                               course_select_all())
     else:
         return render_template('login.html')
 
@@ -40,6 +42,7 @@ def index():
 def discussion():
     sug = Suggestion()
     result = sug.get_all_suggestion()
+    result = r_like.change_count(result)  # 点赞数修改为当前实时点赞数
     # print(result)
     like = r_like.if_like(result,session['username'])
     print(like)

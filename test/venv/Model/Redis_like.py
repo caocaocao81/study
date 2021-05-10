@@ -2,11 +2,11 @@ from myproduct.venv.Redis import *
 import time
 
 class Rlike():
-    sug_set = redis_conn.smembers('sug_set')
+    sug_set = redis_conn_slave.smembers('sug_set')
 
     def get_count(self,sug_id):  # 获得点赞数
         __count = 'sug_user_like_set_'+str(sug_id)
-        return redis_conn.scard(__count)
+        return redis_conn_slave.scard(__count)
 
     def change_count(self,sug_all):  # 更新点赞数
         for i in sug_all:
@@ -49,7 +49,7 @@ class Rlike():
         like = {}
         for i in sug:
             __sug = 'sug_user_like_set_' + str(i['id'])
-            if uname in redis_conn.smembers(__sug):
+            if uname in redis_conn_slave.smembers(__sug):
                 like[i['id']] = 1
             else:
                 like[i['id']] = 0

@@ -2,7 +2,6 @@ from flask import Flask, flash, get_flashed_messages
 from flask import request,render_template,url_for,session,g,redirect
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
-import Redis
 
 
 pymysql.install_as_MySQLdb()
@@ -12,16 +11,23 @@ app = Flask(__name__,static_url_path='/')
 app.config['SECRET_KEY'] = "dasdsafsddf"  # 设置生成session ID
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/py_flask'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_POOL_SIZE'] = 1000
+
 db = SQLAlchemy(app)  # 实例化对象
 
 
 @app.before_request
 def before_user():
     # 过滤机制，如果没有登录或者页面不是登录页面则跳转到登录页面
-    if request.path == '/login' or '/register':
+    # if request.path == '/login' or '/register' or '/get_img':
+    #     return None
+    print(request.path)
+    if 'username' in session:
         return None
     else:
-        if 'username' in session:
+        if request.path == '/login':
+            return None
+        elif request.path == '/get_img':
             return None
         else:
             return render_template('login.html')
@@ -70,13 +76,13 @@ def login():
         # 获得用户名和密码
         username = request.form.get('email', None)
         password = request.form.get('password', None)
+        vcode = request.form.get('code',None)
         g.name = username
-        print(username,password)
         session['username'] = username  # 获得用户名session
         # 设置十分钟的session存在时间
-        message = da.userDAL.validate(username,password)
+        message = da.userDAL.validate(username,password,vcode)
         flash(message)
-        if da.userDAL.user_login(username,password):
+        if da.userDAL.user_login(username,password,vcode):
             # return redirect(url_for('index',url_username=username))
             print(get_flashed_messages())
             return render_template('jiemian.html',url_username=g.name,img=img,course=da.courseDAL.course_select_all())
@@ -89,12 +95,14 @@ def login():
 
 
 @app.errorhandler(404)
-def not_found(error):  # 404
+def not_found(e):  # 404
+    print(e)
     return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
-def error(error):
+def error(e):
+    print(e)
     return render_template('500.html'), 500
 
 
@@ -103,9 +111,15 @@ if __name__ == '__main__':
     from myproduct.venv.controller.index import *
     from myproduct.venv.controller.course import *
     from myproduct.venv.controller.mail import *
+    from myproduct.venv.controller.product import *
+    import myproduct.venv.Redis as Redis
     app.register_blueprint(mail_)
     app.register_blueprint(index_)
     app.register_blueprint(cou)
-    Redis.insert_mysql()
+    app.register_blueprint(product_)
+
+    redis_insert = Redis.insert_mysql()  # 定时更新数据（线程）
+    Redis.get_all_kc().get_all()  # 获得mysql中商品库存
+    redis_insert.start_new_thread()  # 启动该线程
 
     app.run(host='127.0.0.1',debug=True)

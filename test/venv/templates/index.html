@@ -44,7 +44,7 @@
 
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{url_username}}</strong>
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{session['username']}}</strong>
                                  </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="profile.html">Profile</a></li>
@@ -68,8 +68,8 @@
                     <li >
                         <a href="#"><i class="fa fa-user-o"></i> <span class="nav-label">用户操作</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li ><a href="graph_flot.html">更改个人信息</a></li>
-                            <li ><a href="graph_flot.html">查看个人成绩</a></li>
+                            <li ><a href="#">更改个人信息</a></li>
+                            <li ><a href="#">查看个人成绩</a></li>
                         </ul>
                     </li>
                     <li>
@@ -121,13 +121,8 @@
                     <li>
                         <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">E-commerce</span><span class="fa arrow"></span><span class="pull-right label label-primary">SPECIAL</span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="ecommerce_products_grid.html">Products grid</a></li>
-                            <li><a href="ecommerce_product_list.html">Products list</a></li>
-                            <li></li>
-                            <li><a href="ecommerce_product_detail.html">Product detail</a></li>
-                            <li><a href="ecommerce-cart.html">Cart</a></li>
-                            <li><a href="ecommerce-orders.html">Orders</a></li>
-                            <li></li>
+                            <li><a href="{{url_for('product.product_grid')}}">Products grid</a></li>
+                            <li><a href="{{url_for('product.shopping_car')}}">Products list</a></li>
                         </ul>
                     </li>
                     <li>
@@ -200,10 +195,10 @@
             url:"{{url_for('course.course_ajax')}}",
             success:function(data){
                 var course = data;
-                console.log(course[1]);
+                // console.log(course[1]);
                 for(var i in course){
                     var course_name = course[i]["cname"];
-                    console.log(course_name)
+                    // console.log(course_name)
                     $("#course_name").append('<li><a href="/course/'+course_name+'">'+course_name+'</a></li>')
                 }
             }

@@ -33,6 +33,15 @@ def course(cname):
     else:
         return render_template('login.html')
 
+
+@cou.errorhandler(404)
+def not_found(error):  # 404
+    return render_template('404.html'), 404
+
+
+@cou.errorhandler(500)
+def error(error):
+    return render_template('500.html'), 500
 # @cou.route('/course', methods=['GET'])
 # def course():
 #     if session['username']:

@@ -17,6 +17,15 @@ class Product(db.Model):
         result = self.change_data(result)
         return result
 
+    def update_product_Inventory(self,products):
+        products_Inventory = [{'pid': k, 'Inventory': products[k]} for k in products]
+        try:
+            db.session.bulk_update_mappings(Product, products_Inventory)
+            db.session.commit()
+        except:
+            db.session.rollback()  # 事务回滚
+        db.session.close()
+
     def change_data(self,row):
         list = []
         for r in row:
